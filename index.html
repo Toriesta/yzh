@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <title>吉金之旅 · 河南博物院青铜时代</title>
   <style>
+    /* ===== 全局重置 ===== */
     * {
       margin: 0;
       padding: 0;
@@ -14,55 +15,127 @@
       font-family: 'Georgia', 'Songti SC', serif;
       background: #1a1410;
       color: #e8dcc8;
-      overflow-x: hidden;
+      overflow: hidden;
       height: 100vh;
       width: 100vw;
+      -webkit-tap-highlight-color: transparent;
     }
-    .museum-scroll {
-      display: flex;
-      flex-direction: column;
-      height: 100vh;
-      width: 100vw;
-      overflow-y: scroll;
-      scroll-snap-type: y mandatory;
-      scroll-behavior: smooth;
-    }
-    .scene {
-      flex: 0 0 100vh;
-      width: 100vw;
-      scroll-snap-align: start;
+    /* ===== 应用容器 ===== */
+    .app-container {
       position: relative;
+      width: 100vw;
+      height: 100vh;
+      overflow: hidden;
+      background: #1a1410;
+    }
+    /* ===== 页面通用 ===== */
+    .page {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 1.8rem 1.5rem;
-      background: #1a1410;
-      border-bottom: 1px solid #b89b7b20;
+      padding: 2rem 1.5rem;
       overflow-y: auto;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+      transform: scale(0.94);
+      background: #1a1410;
+      -webkit-overflow-scrolling: touch;
     }
-    /* 商代三页 */
-    .scene-shang-1 { background: radial-gradient(circle at 20% 30%, #2a1f18, #0f0c09); }
-    .scene-shang-1::before { content: '⚔️ 商 · 巫祀威仪 · 一'; position: absolute; top: 1.2rem; left: 1.2rem; font-size: 0.8rem; letter-spacing: 3px; color: #c9a87c; background: #1f1610aa; padding: 0.2rem 1rem; border-left: 3px solid #b48b5a; }
-    .scene-shang-2 { background: radial-gradient(circle at 70% 40%, #2d1f17, #100d0a); }
-    .scene-shang-2::before { content: '⚔️ 商 · 巫祀威仪 · 二'; position: absolute; top: 1.2rem; left: 1.2rem; font-size: 0.8rem; letter-spacing: 3px; color: #c9a87c; background: #1f1610aa; padding: 0.2rem 1rem; border-left: 3px solid #b48b5a; }
-    .scene-shang-3 { background: radial-gradient(circle at 40% 70%, #281e17, #0e0b09); }
-    .scene-shang-3::before { content: '⚔️ 商 · 巫祀威仪 · 三'; position: absolute; top: 1.2rem; left: 1.2rem; font-size: 0.8rem; letter-spacing: 3px; color: #c9a87c; background: #1f1610aa; padding: 0.2rem 1rem; border-left: 3px solid #b48b5a; }
-    /* 西周三页 */
-    .scene-zhou-1 { background: radial-gradient(circle at 30% 20%, #2d241c, #12100d); }
-    .scene-zhou-1::before { content: '🏛️ 西周 · 礼乐秩序 · 一'; position: absolute; top: 1.2rem; left: 1.2rem; font-size: 0.8rem; letter-spacing: 3px; color: #dac29c; background: #1f1610aa; padding: 0.2rem 1rem; border-left: 3px solid #c6a87c; }
-    .scene-zhou-2 { background: radial-gradient(circle at 60% 60%, #2a2019, #13100d); }
-    .scene-zhou-2::before { content: '🏛️ 西周 · 礼乐秩序 · 二'; position: absolute; top: 1.2rem; left: 1.2rem; font-size: 0.8rem; letter-spacing: 3px; color: #dac29c; background: #1f1610aa; padding: 0.2rem 1rem; border-left: 3px solid #c6a87c; }
-    .scene-zhou-3 { background: radial-gradient(circle at 80% 30%, #28201a, #11100d); }
-    .scene-zhou-3::before { content: '🏛️ 西周 · 礼乐秩序 · 三'; position: absolute; top: 1.2rem; left: 1.2rem; font-size: 0.8rem; letter-spacing: 3px; color: #dac29c; background: #1f1610aa; padding: 0.2rem 1rem; border-left: 3px solid #c6a87c; }
-    /* 春秋战国三页 */
-    .scene-zhanguo-1 { background: radial-gradient(circle at 20% 70%, #2f241c, #14110e); }
-    .scene-zhanguo-1::before { content: '⚜️ 春秋战国 · 争鸣 · 一'; position: absolute; top: 1.2rem; left: 1.2rem; font-size: 0.8rem; letter-spacing: 3px; color: #dbbc8b; background: #1f1610aa; padding: 0.2rem 1rem; border-left: 3px solid #c8a77b; }
-    .scene-zhanguo-2 { background: radial-gradient(circle at 70% 20%, #2d221b, #13100d); }
-    .scene-zhanguo-2::before { content: '⚜️ 春秋战国 · 争鸣 · 二'; position: absolute; top: 1.2rem; left: 1.2rem; font-size: 0.8rem; letter-spacing: 3px; color: #dbbc8b; background: #1f1610aa; padding: 0.2rem 1rem; border-left: 3px solid #c8a77b; }
-    .scene-zhanguo-3 { background: radial-gradient(circle at 40% 50%, #2a1f18, #12100c); }
-    .scene-zhanguo-3::before { content: '⚜️ 春秋战国 · 争鸣 · 三'; position: absolute; top: 1.2rem; left: 1.2rem; font-size: 0.8rem; letter-spacing: 3px; color: #dbbc8b; background: #1f1610aa; padding: 0.2rem 1rem; border-left: 3px solid #c8a77b; }
-
+    .page.active {
+      opacity: 1;
+      visibility: visible;
+      transform: scale(1);
+      z-index: 10;
+    }
+    .page.exit {
+      opacity: 0;
+      transform: scale(0.90);
+      z-index: 5;
+    }
+    /* ===== 首页样式 ===== */
+    .page-home {
+      background: radial-gradient(circle at 30% 20%, #2a1f18, #0f0c09);
+      justify-content: center;
+      gap: 1.8rem;
+    }
+    .home-title {
+      font-size: 3.2rem;
+      font-weight: 300;
+      letter-spacing: 14px;
+      color: #ebd7b0;
+      text-shadow: 0 0 50px #b48b5a66;
+    }
+    .home-sub {
+      font-size: 1rem;
+      color: #b7a38b;
+      letter-spacing: 6px;
+      border-bottom: 1px solid #b89b7b40;
+      padding-bottom: 0.8rem;
+    }
+    .home-grid {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1.5rem;
+      width: 100%;
+      max-width: 520px;
+      margin-top: 0.5rem;
+    }
+    .home-card {
+      background: #1f1813cc;
+      backdrop-filter: blur(6px);
+      border: 1px solid #b89b7b40;
+      border-radius: 32px;
+      padding: 1.8rem 1.2rem;
+      min-width: 130px;
+      flex: 1 0 130px;
+      text-align: center;
+      cursor: pointer;
+      transition: 0.25s;
+      box-shadow: 0 10px 30px #00000055;
+      color: #e8dcc8;
+      user-select: none;
+    }
+    .home-card:active {
+      transform: scale(0.94);
+      background: #b48b5a30;
+    }
+    .home-card .icon {
+      font-size: 2.8rem;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+    .home-card .label {
+      font-size: 1.2rem;
+      letter-spacing: 4px;
+      color: #ebd7b0;
+    }
+    .home-card .sub-label {
+      font-size: 0.7rem;
+      color: #b7a38b;
+      letter-spacing: 2px;
+    }
+    .home-footer {
+      color: #7a6a5a;
+      font-size: 0.75rem;
+      letter-spacing: 2px;
+      margin-top: 0.2rem;
+    }
+    /* ===== 子页面通用 ===== */
+    .scene {
+      background: #1a1410;
+      padding: 1.8rem 1.5rem;
+      justify-content: flex-start;
+      padding-top: 3.8rem;
+      gap: 0.8rem;
+    }
     .scene-content {
       max-width: 600px;
       width: 100%;
@@ -70,7 +143,6 @@
       flex-direction: column;
       align-items: center;
       gap: 0.8rem;
-      z-index: 2;
     }
     .bronze-title {
       font-size: 2.4rem;
@@ -86,6 +158,7 @@
       border-top: 1px solid #b89b7b40;
       padding-top: 0.3rem;
     }
+    /* ===== 文物卡片 ===== */
     .artifact-card {
       background: #1f1813cc;
       backdrop-filter: blur(4px);
@@ -124,6 +197,7 @@
       color: #ecdcc6;
       margin: 0.6rem 0;
     }
+    /* ===== 游戏区域 ===== */
     .game-area {
       background: #1f1813dd;
       backdrop-filter: blur(4px);
@@ -155,7 +229,11 @@
       margin-top: 0.4rem;
       box-shadow: 0 4px 12px #b48b5a40;
     }
-    .game-btn:hover { background: #dbb07c; transform: scale(1.02); }
+    .game-btn:active {
+      background: #dbb07c;
+      transform: scale(0.96);
+    }
+    /* 问答 */
     .quiz-options {
       display: flex;
       flex-direction: column;
@@ -173,7 +251,10 @@
       text-align: center;
       font-size: 0.9rem;
     }
-    .quiz-option:active { background: #b48b5a; color: #0f0c09; }
+    .quiz-option:active {
+      background: #b48b5a;
+      color: #0f0c09;
+    }
     .quiz-feedback {
       margin-top: 0.4rem;
       padding: 0.4rem;
@@ -183,6 +264,7 @@
       color: #edddc0;
       font-size: 0.9rem;
     }
+    /* 拼图 */
     .puzzle-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
@@ -201,76 +283,194 @@
       cursor: pointer;
       transition: 0.1s;
       color: #dcc29e;
+      user-select: none;
     }
-    .puzzle-piece:active { background: #b48b5a; color: #0f0c09; }
-    .puzzle-piece.empty { background: #1a1410; border: 1px dashed #b89b7b30; color: transparent; }
-    .puzzle-status { font-size: 0.85rem; color: #b7a38b; margin-top: 0.2rem; }
-    .nav-dots {
+    .puzzle-piece:active {
+      background: #b48b5a;
+      color: #0f0c09;
+    }
+    .puzzle-piece.empty {
+      background: #1a1410;
+      border: 1px dashed #b89b7b30;
+      color: transparent;
+    }
+    .puzzle-status {
+      font-size: 0.85rem;
+      color: #b7a38b;
+      margin-top: 0.2rem;
+    }
+    /* ===== 返回首页按钮 ===== */
+    .back-home {
       position: fixed;
-      right: 12px;
-      top: 50%;
-      transform: translateY(-50%);
-      display: flex;
-      flex-direction: column;
-      gap: 14px;
+      top: 1rem;
+      left: 1rem;
       z-index: 50;
-    }
-    .nav-dot {
-      width: 10px;
-      height: 10px;
-      border-radius: 50%;
-      background: #b89b7b40;
-      border: 1px solid #b89b7b80;
-      transition: 0.3s;
+      background: #1f1813cc;
+      backdrop-filter: blur(4px);
+      border: 1px solid #b89b7b40;
+      border-radius: 40px;
+      padding: 0.4rem 1.2rem;
+      color: #ebd7b0;
+      font-size: 0.8rem;
+      letter-spacing: 2px;
       cursor: pointer;
+      transition: 0.3s;
+      display: none;
+      align-items: center;
+      gap: 6px;
+      user-select: none;
     }
-    .nav-dot.active { background: #dbb07c; box-shadow: 0 0 16px #c9a87c; border-color: #dbb07c; }
+    .back-home:active {
+      background: #b48b5a30;
+      transform: scale(0.95);
+    }
+    /* ===== 底部导航提示 ===== */
     .footer-hint {
       margin-top: 0.3rem;
       font-size: 0.7rem;
       color: #7a6a5a;
       letter-spacing: 2px;
+      cursor: pointer;
+      padding: 0.3rem 0.8rem;
+      border-radius: 20px;
+      background: #1f181330;
+      transition: 0.2s;
+      user-select: none;
     }
+    .footer-hint:active {
+      background: #b48b5a20;
+    }
+    /* ===== 加载遮罩 ===== */
+    .loader-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      z-index: 100;
+      background: #1a1410;
+      opacity: 0;
+      transition: opacity 0.45s ease;
+    }
+    .loader-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .loader-overlay .spinner {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 56px;
+      height: 56px;
+      border: 3px solid #b89b7b20;
+      border-top: 3px solid #dbb07c;
+      border-radius: 50%;
+      animation: spin 0.9s linear infinite;
+    }
+    @keyframes spin {
+      0% {
+        transform: translate(-50%, -50%) rotate(0deg);
+      }
+      100% {
+        transform: translate(-50%, -50%) rotate(360deg);
+      }
+    }
+    /* ===== 响应式 ===== */
     @media (max-width: 480px) {
-      .bronze-title { font-size: 2.0rem; }
-      .artifact-name { font-size: 1.3rem; }
+      .home-title {
+        font-size: 2.4rem;
+        letter-spacing: 8px;
+      }
+      .home-card {
+        min-width: 100px;
+        padding: 1.2rem;
+      }
+      .bronze-title {
+        font-size: 2.0rem;
+      }
+      .scene {
+        padding-top: 3.0rem;
+      }
     }
   </style>
 </head>
 <body>
-<div class="museum-scroll" id="scrollContainer">
-  <!-- 商代 · 三页 -->
-  <section class="scene scene-shang-1" id="scene-shang-1">
+
+<div class="app-container" id="app">
+
+  <!-- ===== 加载遮罩 ===== -->
+  <div class="loader-overlay" id="loaderOverlay">
+    <div class="spinner"></div>
+  </div>
+
+  <!-- ==================== 首页 ==================== -->
+  <div class="page page-home active" id="page-home">
+    <div class="home-title">吉金之旅</div>
+    <div class="home-sub">🏛️ 河南博物院 · 青铜时代</div>
+    <div class="home-grid">
+      <div class="home-card" data-target="shang">
+        <span class="icon">⚔️</span>
+        <div class="label">商代</div>
+        <div class="sub-label">巫祀威仪</div>
+      </div>
+      <div class="home-card" data-target="zhou">
+        <span class="icon">🎵</span>
+        <div class="label">西周</div>
+        <div class="sub-label">礼乐秩序</div>
+      </div>
+      <div class="home-card" data-target="zhanguo">
+        <span class="icon">🌀</span>
+        <div class="label">春秋战国</div>
+        <div class="sub-label">争鸣变革</div>
+      </div>
+    </div>
+    <div class="home-footer">点击进入 · 穿越三朝</div>
+  </div>
+
+  <!-- ==================== 商代 · 三页 ==================== -->
+
+  <!-- 商代 第1页 -->
+  <div class="page scene" id="page-shang-1" style="background: radial-gradient(circle at 20% 30%, #2a1f18, #0f0c09);">
     <div class="scene-content">
       <div class="bronze-title">吉金 · 商</div>
       <div class="bronze-sub">🔮 神权 · 王权 · 青铜</div>
       <div class="artifact-card">
         <div class="artifact-name">妇好鸮尊</div>
         <div class="artifact-dynasty">商代晚期 · 殷墟妇好墓</div>
-        <div class="artifact-desc">猫头鹰形酒尊，内壁铭“妇好”。女将军妇好的专属礼器，融合军事威仪与神灵崇拜。</div>
-        <div class="artifact-meaning">✦ 地位与意义：商代青铜器是“祀与戎”的载体，鸮尊体现王权与神权合一，是沟通天地、彰显征伐之力的重器。</div>
+        <div class="artifact-desc">猫头鹰形酒尊，内壁铭"妇好"。女将军妇好的专属礼器，融合军事威仪与神灵崇拜。</div>
+        <div class="artifact-meaning">✦ 地位与意义：商代青铜器是"祀与戎"的载体，鸮尊体现王权与神权合一，是沟通天地、彰显征伐之力的重器。</div>
       </div>
-      <div class="game-area"><div class="game-title">🧩 商 · 青铜问答</div>
-        <div id="quiz1"><p style="color:#d4c6b2; margin-bottom:0.3rem;">“妇好鸮尊”最可能用于哪种场合？</p>
-          <div class="quiz-options" id="quizOptions1"><div class="quiz-option" data-index="0">A. 宴饮娱乐</div><div class="quiz-option" data-index="1">B. 祭祀与军事仪典</div><div class="quiz-option" data-index="2">C. 日常储水</div></div>
+      <div class="game-area">
+        <div class="game-title">🧩 商 · 青铜问答</div>
+        <div id="quiz1">
+          <p style="color:#d4c6b2; margin-bottom:0.3rem;">"妇好鸮尊"最可能用于哪种场合？</p>
+          <div class="quiz-options" id="quizOptions1">
+            <div class="quiz-option" data-index="0">A. 宴饮娱乐</div>
+            <div class="quiz-option" data-index="1">B. 祭祀与军事仪典</div>
+            <div class="quiz-option" data-index="2">C. 日常储水</div>
+          </div>
           <div id="quizFeedback1" class="quiz-feedback"></div>
         </div>
       </div>
-      <div class="footer-hint">⬇ 滑动 · 商代 · 二</div>
+      <div class="footer-hint" data-nav="next">⬇ 滑动或点击 · 下一页</div>
     </div>
-  </section>
+  </div>
 
-  <section class="scene scene-shang-2" id="scene-shang-2">
+  <!-- 商代 第2页 -->
+  <div class="page scene" id="page-shang-2" style="background: radial-gradient(circle at 70% 40%, #2d1f17, #100d0a);">
     <div class="scene-content">
       <div class="bronze-title">吉金 · 商</div>
       <div class="bronze-sub">🔮 狞厉之美 · 司母戊鼎</div>
       <div class="artifact-card">
         <div class="artifact-name">司母戊鼎 (后母戊鼎)</div>
         <div class="artifact-dynasty">商代晚期 · 安阳殷墟</div>
-        <div class="artifact-desc">目前已知最重的青铜器，重达832.84千克。鼎腹内壁铸“后母戊”三字，是商王为祭祀其母所铸。</div>
+        <div class="artifact-desc">目前已知最重的青铜器，重达832.84千克。鼎腹内壁铸"后母戊"三字，是商王为祭祀其母所铸。</div>
         <div class="artifact-meaning">✦ 地位与意义：代表商代青铜铸造技术的巅峰，更是王权与宗族祭祀的至高象征，彰显商代晚期强大的国力与礼制。</div>
       </div>
-      <div class="game-area"><div class="game-title">🧩 商 · 纹样辨识</div>
+      <div class="game-area">
+        <div class="game-title">🧩 商 · 纹样辨识</div>
         <div style="display:flex; gap:10px; flex-wrap:wrap; justify-content:center; margin:0.4rem 0;">
           <span style="background:#2a1f18; padding:0.3rem 1rem; border-radius:40px; border:1px solid #b89b7b40;">🐉 夔龙纹</span>
           <span style="background:#2a1f18; padding:0.3rem 1rem; border-radius:40px; border:1px solid #b89b7b40;">🐅 虎纹</span>
@@ -278,11 +478,12 @@
         </div>
         <div style="color:#b7a38b; font-size:0.85rem;">司母戊鼎以兽面纹与夔龙纹为主，体现商代狞厉之美。</div>
       </div>
-      <div class="footer-hint">⬇ 滑动 · 商代 · 三</div>
+      <div class="footer-hint" data-nav="next">⬇ 滑动或点击 · 下一页</div>
     </div>
-  </section>
+  </div>
 
-  <section class="scene scene-shang-3" id="scene-shang-3">
+  <!-- 商代 第3页 -->
+  <div class="page scene" id="page-shang-3" style="background: radial-gradient(circle at 40% 70%, #281e17, #0e0b09);">
     <div class="scene-content">
       <div class="bronze-title">吉金 · 商</div>
       <div class="bronze-sub">🔮 青铜酒器 · 爵与觚</div>
@@ -292,34 +493,39 @@
         <div class="artifact-desc">爵为饮酒器，觚为饮酒或盛酒器，常成组出现。商代酒器繁复，反映当时饮酒风气与祭祀礼仪。</div>
         <div class="artifact-meaning">✦ 地位与意义：酒器在商代礼制中占据核心，爵、觚等是等级身份的象征，也是沟通神灵的重要媒介。</div>
       </div>
-      <div class="game-area"><div class="game-title">🧩 商 · 礼器组合</div>
+      <div class="game-area">
+        <div class="game-title">🧩 商 · 礼器组合</div>
         <div style="display:flex; justify-content:center; gap:16px; font-size:2.2rem; padding:0.3rem 0;">🥂 爵 · 觚 · 斝</div>
-        <div style="color:#b7a38b; font-size:0.85rem;">商代礼器组合“爵觚”是身份等级的标识。</div>
+        <div style="color:#b7a38b; font-size:0.85rem;">商代礼器组合"爵觚"是身份等级的标识。</div>
       </div>
-      <div class="footer-hint">⬇ 进入西周 · 礼乐秩序</div>
+      <div class="footer-hint" data-nav="home">⬆ 点击返回首页</div>
     </div>
-  </section>
+  </div>
 
-  <!-- 西周 · 三页 -->
-  <section class="scene scene-zhou-1" id="scene-zhou-1">
+  <!-- ==================== 西周 · 三页 ==================== -->
+
+  <!-- 西周 第1页 -->
+  <div class="page scene" id="page-zhou-1" style="background: radial-gradient(circle at 30% 20%, #2d241c, #12100d);">
     <div class="scene-content">
       <div class="bronze-title">吉金 · 西周</div>
       <div class="bronze-sub">🎵 礼乐 · 秩序 · 宗法</div>
       <div class="artifact-card">
         <div class="artifact-name">玉柄铁剑 · 青铜余韵</div>
         <div class="artifact-dynasty">西周晚期 · 三门峡虢国墓</div>
-        <div class="artifact-desc">玉柄、铜芯、铁刃，被誉为“中华第一剑”。铁与铜的结合，开启新时代。</div>
-        <div class="artifact-meaning">✦ 地位与意义：西周青铜器承载宗法礼乐，是“藏礼于器”的象征。此剑标志着青铜向铁器过渡，礼制与实用并重。</div>
+        <div class="artifact-desc">玉柄、铜芯、铁刃，被誉为"中华第一剑"。铁与铜的结合，开启新时代。</div>
+        <div class="artifact-meaning">✦ 地位与意义：西周青铜器承载宗法礼乐，是"藏礼于器"的象征。此剑标志着青铜向铁器过渡，礼制与实用并重。</div>
       </div>
-      <div class="game-area"><div class="game-title">🧩 西周 · 礼乐制度</div>
-        <div style="color:#d4c6b2; font-size:0.9rem; padding:0.2rem 0;">“天子九鼎，诸侯七鼎，大夫五鼎，元士三鼎。”</div>
+      <div class="game-area">
+        <div class="game-title">🧩 西周 · 礼乐制度</div>
+        <div style="color:#d4c6b2; font-size:0.9rem; padding:0.2rem 0;">"天子九鼎，诸侯七鼎，大夫五鼎，元士三鼎。"</div>
         <div style="color:#b7a38b; font-size:0.8rem;">列鼎制度是西周宗法礼乐的核心体现。</div>
       </div>
-      <div class="footer-hint">⬇ 滑动 · 西周 · 二</div>
+      <div class="footer-hint" data-nav="next">⬇ 滑动或点击 · 下一页</div>
     </div>
-  </section>
+  </div>
 
-  <section class="scene scene-zhou-2" id="scene-zhou-2">
+  <!-- 西周 第2页 -->
+  <div class="page scene" id="page-zhou-2" style="background: radial-gradient(circle at 60% 60%, #2a2019, #13100d);">
     <div class="scene-content">
       <div class="bronze-title">吉金 · 西周</div>
       <div class="bronze-sub">🎵 铭文 · 史墙盘</div>
@@ -327,17 +533,19 @@
         <div class="artifact-name">史墙盘</div>
         <div class="artifact-dynasty">西周中期 · 扶风庄白村</div>
         <div class="artifact-desc">盘内底铸有铭文284字，记述西周文、武、成、康、昭、穆六王事迹，是西周青铜器铭文代表作。</div>
-        <div class="artifact-meaning">✦ 地位与意义：铭文是研究西周历史的第一手文献，史墙盘将青铜器从礼器提升为“史书”，承载王朝记忆。</div>
+        <div class="artifact-meaning">✦ 地位与意义：铭文是研究西周历史的第一手文献，史墙盘将青铜器从礼器提升为"史书"，承载王朝记忆。</div>
       </div>
-      <div class="game-area"><div class="game-title">🧩 铭文拓片</div>
-        <div style="background:#1f1610; padding:0.6rem; border-radius:16px; color:#dccbb8; font-family: 'KaiTi', serif; letter-spacing:2px; text-align:center;">“曰古文王，初釐和于政……”</div>
-        <div style="color:#b7a38b; font-size:0.8rem;">史墙盘铭文是“金文”书法典范。</div>
+      <div class="game-area">
+        <div class="game-title">🧩 铭文拓片</div>
+        <div style="background:#1f1610; padding:0.6rem; border-radius:16px; color:#dccbb8; font-family: 'KaiTi', serif; letter-spacing:2px; text-align:center;">"曰古文王，初釐和于政……"</div>
+        <div style="color:#b7a38b; font-size:0.8rem;">史墙盘铭文是"金文"书法典范。</div>
       </div>
-      <div class="footer-hint">⬇ 滑动 · 西周 · 三</div>
+      <div class="footer-hint" data-nav="next">⬇ 滑动或点击 · 下一页</div>
     </div>
-  </section>
+  </div>
 
-  <section class="scene scene-zhou-3" id="scene-zhou-3">
+  <!-- 西周 第3页 (含拼图) -->
+  <div class="page scene" id="page-zhou-3" style="background: radial-gradient(circle at 80% 30%, #28201a, #11100d);">
     <div class="scene-content">
       <div class="bronze-title">吉金 · 西周</div>
       <div class="bronze-sub">🎵 乐悬 · 编钟</div>
@@ -345,63 +553,71 @@
         <div class="artifact-name">虢国编钟 (复原)</div>
         <div class="artifact-dynasty">西周晚期 · 虢国墓地</div>
         <div class="artifact-desc">成组编钟是西周礼乐制度的物化形式，不同数量与规格对应不同等级。</div>
-        <div class="artifact-meaning">✦ 地位与意义：编钟是“礼乐”的核心乐器，体现西周“以乐行礼”的政治理想，也是贵族身份的标志。</div>
+        <div class="artifact-meaning">✦ 地位与意义：编钟是"礼乐"的核心乐器，体现西周"以乐行礼"的政治理想，也是贵族身份的标志。</div>
       </div>
-      <!-- 拼图游戏 (3x3) 放置在西周第三页 -->
-      <div class="game-area" id="gamePuzzle">
+      <div class="game-area">
         <div class="game-title">🧩 西周 · 兽面纹拼图</div>
         <div id="puzzleContainer">
-          <div class="puzzle-grid" id="puzzleGrid">
-            <!-- JS 生成 -->
-          </div>
+          <div class="puzzle-grid" id="puzzleGrid"></div>
           <div class="puzzle-status" id="puzzleStatus">点击相邻纹样移动，复原兽面</div>
           <button class="game-btn" id="shufflePuzzle">🔄 重排</button>
         </div>
       </div>
-      <div class="footer-hint">⬇ 进入春秋战国 · 争鸣</div>
+      <div class="footer-hint" data-nav="home">⬆ 点击返回首页</div>
     </div>
-  </section>
+  </div>
 
-  <!-- 春秋战国 · 三页 -->
-  <section class="scene scene-zhanguo-1" id="scene-zhanguo-1">
+  <!-- ==================== 春秋战国 · 三页 ==================== -->
+
+  <!-- 春秋战国 第1页 -->
+  <div class="page scene" id="page-zhanguo-1" style="background: radial-gradient(circle at 20% 70%, #2f241c, #14110e);">
     <div class="scene-content">
       <div class="bronze-title">吉金 · 春秋战国</div>
       <div class="bronze-sub">🌀 争鸣 · 革新 · 多元</div>
       <div class="artifact-card">
         <div class="artifact-name">莲鹤方壶</div>
         <div class="artifact-dynasty">春秋 · 新郑李家楼</div>
-        <div class="artifact-desc">壶顶莲瓣中立鹤，展翅欲飞。被誉为“青铜时代的绝唱”。</div>
+        <div class="artifact-desc">壶顶莲瓣中立鹤，展翅欲飞。被誉为"青铜时代的绝唱"。</div>
         <div class="artifact-meaning">✦ 地位与意义：春秋战国青铜器从礼器转向审美与实用，莲鹤方壶展现清新自由之风，反映礼崩乐坏下的思想解放。</div>
       </div>
-      <div class="game-area"><div class="game-title">🧩 春秋 · 思想碰撞</div>
-        <div id="quiz2"><p style="color:#d4c6b2; margin-bottom:0.3rem;">莲鹤方壶的艺术风格最可能受到哪种思潮影响？</p>
-          <div class="quiz-options" id="quizOptions2"><div class="quiz-option" data-index="0">A. 儒家礼制</div><div class="quiz-option" data-index="1">B. 道家自然与个性解放</div><div class="quiz-option" data-index="2">C. 法家权术</div></div>
+      <div class="game-area">
+        <div class="game-title">🧩 春秋 · 思想碰撞</div>
+        <div id="quiz2">
+          <p style="color:#d4c6b2; margin-bottom:0.3rem;">莲鹤方壶的艺术风格最可能受到哪种思潮影响？</p>
+          <div class="quiz-options" id="quizOptions2">
+            <div class="quiz-option" data-index="0">A. 儒家礼制</div>
+            <div class="quiz-option" data-index="1">B. 道家自然与个性解放</div>
+            <div class="quiz-option" data-index="2">C. 法家权术</div>
+          </div>
           <div id="quizFeedback2" class="quiz-feedback"></div>
         </div>
       </div>
-      <div class="footer-hint">⬇ 滑动 · 春秋战国 · 二</div>
+      <div class="footer-hint" data-nav="next">⬇ 滑动或点击 · 下一页</div>
     </div>
-  </section>
+  </div>
 
-  <section class="scene scene-zhanguo-2" id="scene-zhanguo-2">
+  <!-- 春秋战国 第2页 -->
+  <div class="page scene" id="page-zhanguo-2" style="background: radial-gradient(circle at 70% 20%, #2d221b, #13100d);">
     <div class="scene-content">
       <div class="bronze-title">吉金 · 春秋战国</div>
       <div class="bronze-sub">🌀 青铜兵器 · 越王勾践剑</div>
       <div class="artifact-card">
         <div class="artifact-name">越王勾践剑 (复制)</div>
         <div class="artifact-dynasty">春秋晚期 · 湖北江陵</div>
-        <div class="artifact-desc">剑身满饰菱形纹，剑格镶嵌绿松石。出土时锋芒毕露，被誉为“天下第一剑”。</div>
+        <div class="artifact-desc">剑身满饰菱形纹，剑格镶嵌绿松石。出土时锋芒毕露，被誉为"天下第一剑"。</div>
         <div class="artifact-meaning">✦ 地位与意义：春秋战国时期青铜兵器工艺达到顶峰，剑不仅是武器，更是贵族身份与尚武精神的象征。</div>
       </div>
-      <div class="game-area"><div class="game-title">⚔️ 兵器演变</div>
+      <div class="game-area">
+        <div class="game-title">⚔️ 兵器演变</div>
         <div style="display:flex; gap:8px; flex-wrap:wrap; justify-content:center; font-size:1.6rem; padding:0.3rem 0;">🗡️ 戈 · 矛 · 剑 · 戟</div>
         <div style="color:#b7a38b; font-size:0.8rem;">春秋战国时期，青铜兵器逐渐被铁器取代，但工艺至臻。</div>
       </div>
-      <div class="footer-hint">⬇ 滑动 · 春秋战国 · 三</div>
+      <div class="footer-hint" data-nav="next">⬇ 滑动或点击 · 下一页</div>
     </div>
-  </section>
+  </div>
 
-  <section class="scene scene-zhanguo-3" id="scene-zhanguo-3">
+  <!-- 春秋战国 第3页 -->
+  <div class="page scene" id="page-zhanguo-3" style="background: radial-gradient(circle at 40% 50%, #2a1f18, #12100c);">
     <div class="scene-content">
       <div class="bronze-title">吉金 · 春秋战国</div>
       <div class="bronze-sub">🌀 青铜货币 · 布币与刀币</div>
@@ -409,128 +625,234 @@
         <div class="artifact-name">空首布 · 刀币</div>
         <div class="artifact-dynasty">春秋战国 · 中原及齐燕</div>
         <div class="artifact-desc">青铜货币的流行，标志着青铜器从礼器、兵器走向商品经济，深刻改变社会结构。</div>
-        <div class="artifact-meaning">✦ 地位与意义：青铜货币是春秋战国社会变革的缩影，青铜器从“神器”走向“民用”，反映了经济与商业的勃兴。</div>
+        <div class="artifact-meaning">✦ 地位与意义：青铜货币是春秋战国社会变革的缩影，青铜器从"神器"走向"民用"，反映了经济与商业的勃兴。</div>
       </div>
-      <div class="game-area"><div class="game-title">💰 货币与时代</div>
+      <div class="game-area">
+        <div class="game-title">💰 货币与时代</div>
         <div style="display:flex; gap:12px; justify-content:center; font-size:2.2rem; padding:0.2rem 0;">🪙 布币 · 刀币 · 圜钱</div>
-        <div style="color:#b7a38b; font-size:0.8rem;">青铜货币的出现，是青铜器“走下神坛”的重要标志。</div>
+        <div style="color:#b7a38b; font-size:0.8rem;">青铜货币的出现，是青铜器"走下神坛"的重要标志。</div>
       </div>
-      <div class="footer-hint">🏛️ 穿越三朝九页 · 文明之光</div>
+      <div class="footer-hint" data-nav="home">⬆ 点击返回首页</div>
     </div>
-  </section>
-</div>
+  </div>
 
-<!-- 导航点 (9个) -->
-<div class="nav-dots" id="navDots">
-  <div class="nav-dot active" data-target="scene-shang-1"></div>
-  <div class="nav-dot" data-target="scene-shang-2"></div>
-  <div class="nav-dot" data-target="scene-shang-3"></div>
-  <div class="nav-dot" data-target="scene-zhou-1"></div>
-  <div class="nav-dot" data-target="scene-zhou-2"></div>
-  <div class="nav-dot" data-target="scene-zhou-3"></div>
-  <div class="nav-dot" data-target="scene-zhanguo-1"></div>
-  <div class="nav-dot" data-target="scene-zhanguo-2"></div>
-  <div class="nav-dot" data-target="scene-zhanguo-3"></div>
+  <!-- ===== 返回首页按钮 ===== -->
+  <div class="back-home" id="backHomeBtn">🏛️ 首页</div>
+
 </div>
 
 <script>
   (function() {
-    // ----- 滚动导航 (9页) -----
-    const sceneIds = [
-      'scene-shang-1', 'scene-shang-2', 'scene-shang-3',
-      'scene-zhou-1', 'scene-zhou-2', 'scene-zhou-3',
-      'scene-zhanguo-1', 'scene-zhanguo-2', 'scene-zhanguo-3'
-    ];
-    const dots = document.querySelectorAll('.nav-dot');
-    const container = document.getElementById('scrollContainer');
+    'use strict';
 
-    function updateActiveDot() {
-      const scrollTop = container.scrollTop;
-      const winHeight = window.innerHeight;
-      let activeIndex = 0;
-      sceneIds.forEach((id, idx) => {
-        const el = document.getElementById(id);
-        if (el) {
-          const offset = el.offsetTop;
-          if (scrollTop >= offset - winHeight * 0.35) {
-            activeIndex = idx;
+    // ============================================================
+    //  1. DOM 引用
+    // ============================================================
+    const app = document.getElementById('app');
+    const pages = app.querySelectorAll('.page');
+    const homePage = document.getElementById('page-home');
+    const backBtn = document.getElementById('backHomeBtn');
+    const loader = document.getElementById('loaderOverlay');
+
+    // ============================================================
+    //  2. 页面分组
+    // ============================================================
+    const groupMap = {
+      'shang': ['page-shang-1', 'page-shang-2', 'page-shang-3'],
+      'zhou': ['page-zhou-1', 'page-zhou-2', 'page-zhou-3'],
+      'zhanguo': ['page-zhanguo-1', 'page-zhanguo-2', 'page-zhanguo-3']
+    };
+    const allSubPages = Object.values(groupMap).flat();
+
+    let currentPageId = 'page-home';
+    let isTransitioning = false;
+
+    // ============================================================
+    //  3. 加载动画 & 导航
+    // ============================================================
+    function showLoader(callback) {
+      loader.classList.add('active');
+      setTimeout(function() {
+        if (callback) callback();
+        setTimeout(function() {
+          loader.classList.remove('active');
+        }, 400);
+      }, 480);
+    }
+
+    function navigateTo(pageId) {
+      if (isTransitioning || pageId === currentPageId) return;
+      isTransitioning = true;
+
+      showLoader(function() {
+        // 隐藏所有页面
+        pages.forEach(function(p) {
+          p.classList.remove('active', 'exit');
+        });
+        var target = document.getElementById(pageId);
+        if (target) {
+          target.classList.add('active');
+          currentPageId = pageId;
+          // 返回按钮
+          if (pageId === 'page-home') {
+            backBtn.style.display = 'none';
+          } else {
+            backBtn.style.display = 'flex';
           }
         }
-      });
-      dots.forEach((dot, i) => {
-        dot.classList.toggle('active', i === activeIndex);
+        isTransitioning = false;
       });
     }
 
-    container.addEventListener('scroll', updateActiveDot);
-    dots.forEach((dot, idx) => {
-      dot.addEventListener('click', function(e) {
-        const targetId = sceneIds[idx];
-        const target = document.getElementById(targetId);
-        if (target) {
-          target.scrollIntoView({ behavior: 'smooth' });
+    // ============================================================
+    //  4. 首页卡片点击
+    // ============================================================
+    document.querySelectorAll('.home-card').forEach(function(card) {
+      card.addEventListener('click', function() {
+        var target = this.dataset.target;
+        if (target && groupMap[target]) {
+          navigateTo(groupMap[target][0]);
         }
       });
     });
-    setTimeout(updateActiveDot, 300);
 
-    // ----- 商代问答 (第一个) -----
-    const quiz1Options = document.querySelectorAll('#quizOptions1 .quiz-option');
-    const feedback1 = document.getElementById('quizFeedback1');
-    quiz1Options.forEach(opt => {
+    // ============================================================
+    //  5. 返回首页
+    // ============================================================
+    backBtn.addEventListener('click', function() {
+      navigateTo('page-home');
+    });
+
+    // ============================================================
+    //  6. footer-hint 导航 (点击)
+    // ============================================================
+    document.querySelectorAll('.footer-hint').forEach(function(el) {
+      el.addEventListener('click', function(e) {
+        e.stopPropagation();
+        var nav = this.dataset.nav;
+        if (nav === 'home') {
+          navigateTo('page-home');
+          return;
+        }
+        // 查找当前所在组
+        var currentId = currentPageId;
+        var groupKey = null;
+        for (var key in groupMap) {
+          if (groupMap[key].indexOf(currentId) !== -1) {
+            groupKey = key;
+            break;
+          }
+        }
+        if (!groupKey) return;
+        var group = groupMap[groupKey];
+        var idx = group.indexOf(currentId);
+        if (nav === 'next' && idx < group.length - 1) {
+          navigateTo(group[idx + 1]);
+        } else if (nav === 'prev' && idx > 0) {
+          navigateTo(group[idx - 1]);
+        }
+      });
+    });
+
+    // ============================================================
+    //  7. 触摸滑动切换 (子页面内)
+    // ============================================================
+    var touchStartY = 0;
+
+    document.addEventListener('touchstart', function(e) {
+      var target = e.target.closest('.page');
+      if (!target || target.id === 'page-home') return;
+      touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+
+    document.addEventListener('touchend', function(e) {
+      var target = e.target.closest('.page');
+      if (!target || target.id === 'page-home') return;
+      var touchEndY = e.changedTouches[0].clientY;
+      var diff = touchStartY - touchEndY;
+      if (Math.abs(diff) < 40) return;
+
+      var currentId = target.id;
+      var groupKey = null;
+      for (var key in groupMap) {
+        if (groupMap[key].indexOf(currentId) !== -1) {
+          groupKey = key;
+          break;
+        }
+      }
+      if (!groupKey) return;
+      var group = groupMap[groupKey];
+      var idx = group.indexOf(currentId);
+      if (diff > 0 && idx < group.length - 1) {
+        navigateTo(group[idx + 1]);
+      } else if (diff < 0 && idx > 0) {
+        navigateTo(group[idx - 1]);
+      }
+    }, { passive: true });
+
+    // ============================================================
+    //  8. 商代问答
+    // ============================================================
+    var q1Options = document.querySelectorAll('#quizOptions1 .quiz-option');
+    var fb1 = document.getElementById('quizFeedback1');
+    q1Options.forEach(function(opt) {
       opt.addEventListener('click', function() {
-        const idx = parseInt(this.dataset.index);
+        var idx = parseInt(this.dataset.index);
         if (idx === 1) {
-          feedback1.innerHTML = '✅ 正确！商代青铜器是祭祀与军事的礼器，鸮尊象征女将军的威严。';
-          feedback1.style.color = '#b8d9b0';
+          fb1.innerHTML = '✅ 正确！商代青铜器是祭祀与军事的礼器，鸮尊象征女将军的威严。';
+          fb1.style.color = '#b8d9b0';
         } else {
-          feedback1.innerHTML = '❌ 再想想。商代青铜重器多用于“祀与戎”，与王权、神权相关。';
-          feedback1.style.color = '#d9b0b0';
+          fb1.innerHTML = '❌ 再想想。商代青铜重器多用于"祀与戎"，与王权、神权相关。';
+          fb1.style.color = '#d9b0b0';
         }
       });
     });
 
-    // ----- 春秋战国问答 (第二个) -----
-    const quiz2Options = document.querySelectorAll('#quizOptions2 .quiz-option');
-    const feedback2 = document.getElementById('quizFeedback2');
-    quiz2Options.forEach(opt => {
+    // ============================================================
+    //  9. 春秋问答
+    // ============================================================
+    var q2Options = document.querySelectorAll('#quizOptions2 .quiz-option');
+    var fb2 = document.getElementById('quizFeedback2');
+    q2Options.forEach(function(opt) {
       opt.addEventListener('click', function() {
-        const idx = parseInt(this.dataset.index);
+        var idx = parseInt(this.dataset.index);
         if (idx === 1) {
-          feedback2.innerHTML = '✅ 正确！莲鹤方壶清新灵动，体现道家自然与个性解放的时代思潮。';
-          feedback2.style.color = '#b8d9b0';
+          fb2.innerHTML = '✅ 正确！莲鹤方壶清新灵动，体现道家自然与个性解放的时代思潮。';
+          fb2.style.color = '#b8d9b0';
         } else {
-          feedback2.innerHTML = '❌ 再思考。春秋战国时期礼崩乐坏，艺术更趋向自由与个性表达。';
-          feedback2.style.color = '#d9b0b0';
+          fb2.innerHTML = '❌ 再思考。春秋战国时期礼崩乐坏，艺术更趋向自由与个性表达。';
+          fb2.style.color = '#d9b0b0';
         }
       });
     });
 
-    // ----- 拼图 (3x3) 放置在西周第三页 -----
-    const puzzleGrid = document.getElementById('puzzleGrid');
-    const puzzleStatus = document.getElementById('puzzleStatus');
-    const shuffleBtn = document.getElementById('shufflePuzzle');
+    // ============================================================
+    //  10. 西周拼图 (3×3)
+    // ============================================================
+    var puzzleGrid = document.getElementById('puzzleGrid');
+    var puzzleStatus = document.getElementById('puzzleStatus');
+    var shuffleBtn = document.getElementById('shufflePuzzle');
 
-    let puzzleState = [1,2,3,4,5,6,7,8,0];
-    let emptyIndex = 8;
-    let moveCount = 0;
-    const size = 3;
-    const symbols = ['🔱','🐉','🐍','🦅','🐗','🐲','🦌','🐎'];
+    var puzzleState = [1, 2, 3, 4, 5, 6, 7, 8, 0];
+    var emptyIndex = 8;
+    var moveCount = 0;
+    var SIZE = 3;
+    var SYMBOLS = ['🔱', '🐉', '🐍', '🦅', '🐗', '🐲', '🦌', '🐎'];
 
     function renderPuzzle() {
       puzzleGrid.innerHTML = '';
-      puzzleState.forEach((val, idx) => {
-        const div = document.createElement('div');
+      puzzleState.forEach(function(val, idx) {
+        var div = document.createElement('div');
         div.className = 'puzzle-piece';
         if (val === 0) {
           div.classList.add('empty');
           div.textContent = '';
         } else {
-          div.textContent = symbols[val-1] || val;
+          div.textContent = SYMBOLS[val - 1] || val;
         }
         div.dataset.index = idx;
         div.addEventListener('click', function() {
-          const clickIdx = parseInt(this.dataset.index);
+          var clickIdx = parseInt(this.dataset.index);
           tryMove(clickIdx);
         });
         puzzleGrid.appendChild(div);
@@ -539,26 +861,26 @@
         puzzleStatus.innerHTML = '🎉 拼图复原！西周兽面纹重现，礼乐之和。';
         puzzleStatus.style.color = '#dbb07c';
       } else {
-        puzzleStatus.innerHTML = `🔄 移动: ${moveCount}，拼合兽面纹`;
+        puzzleStatus.innerHTML = '🔄 移动: ' + moveCount + '，拼合兽面纹';
         puzzleStatus.style.color = '#b7a38b';
       }
     }
 
     function isSolved() {
-      for (let i=0; i<8; i++) {
-        if (puzzleState[i] !== i+1) return false;
+      for (var i = 0; i < 8; i++) {
+        if (puzzleState[i] !== i + 1) return false;
       }
       return puzzleState[8] === 0;
     }
 
     function tryMove(clickIdx) {
-      const empty = emptyIndex;
-      const clickRow = Math.floor(clickIdx / size);
-      const clickCol = clickIdx % size;
-      const emptyRow = Math.floor(empty / size);
-      const emptyCol = empty % size;
-      if ( (Math.abs(clickRow - emptyRow) === 1 && clickCol === emptyCol) ||
-           (Math.abs(clickCol - emptyCol) === 1 && clickRow === emptyRow) ) {
+      var empty = emptyIndex;
+      var clickRow = Math.floor(clickIdx / SIZE);
+      var clickCol = clickIdx % SIZE;
+      var emptyRow = Math.floor(empty / SIZE);
+      var emptyCol = empty % SIZE;
+      if ((Math.abs(clickRow - emptyRow) === 1 && clickCol === emptyCol) ||
+        (Math.abs(clickCol - emptyCol) === 1 && clickRow === emptyRow)) {
         puzzleState[empty] = puzzleState[clickIdx];
         puzzleState[clickIdx] = 0;
         emptyIndex = clickIdx;
@@ -568,20 +890,25 @@
     }
 
     function shufflePuzzle() {
-      for (let step=0; step<80; step++) {
-        const neighbors = [];
-        const emptyRow = Math.floor(emptyIndex / size);
-        const emptyCol = emptyIndex % size;
-        const dirs = [[-1,0],[1,0],[0,-1],[0,1]];
-        dirs.forEach(d => {
-          const nr = emptyRow + d[0];
-          const nc = emptyCol + d[1];
-          if (nr>=0 && nr<size && nc>=0 && nc<size) {
-            neighbors.push(nr*size + nc);
+      for (var step = 0; step < 80; step++) {
+        var neighbors = [];
+        var emptyRow = Math.floor(emptyIndex / SIZE);
+        var emptyCol = emptyIndex % SIZE;
+        var dirs = [
+          [-1, 0],
+          [1, 0],
+          [0, -1],
+          [0, 1]
+        ];
+        dirs.forEach(function(d) {
+          var nr = emptyRow + d[0];
+          var nc = emptyCol + d[1];
+          if (nr >= 0 && nr < SIZE && nc >= 0 && nc < SIZE) {
+            neighbors.push(nr * SIZE + nc);
           }
         });
         if (neighbors.length === 0) continue;
-        const rand = neighbors[Math.floor(Math.random() * neighbors.length)];
+        var rand = neighbors[Math.floor(Math.random() * neighbors.length)];
         puzzleState[emptyIndex] = puzzleState[rand];
         puzzleState[rand] = 0;
         emptyIndex = rand;
@@ -594,16 +921,24 @@
       shufflePuzzle();
     });
 
+    // 初始化拼图
     function initPuzzle() {
-      puzzleState = [1,2,3,4,5,6,7,8,0];
+      puzzleState = [1, 2, 3, 4, 5, 6, 7, 8, 0];
       emptyIndex = 8;
       shufflePuzzle();
     }
     initPuzzle();
 
-    // 修复IE/移动端点击
-    console.log('吉金之旅 · 九页穿越 已启动');
+    // ============================================================
+    //  11. 启动：首页激活
+    // ============================================================
+    homePage.classList.add('active');
+    currentPageId = 'page-home';
+    backBtn.style.display = 'none';
+
+    console.log('🏛️ 吉金之旅 · 河南博物院青铜时代 H5 已启动');
   })();
 </script>
+
 </body>
 </html>
